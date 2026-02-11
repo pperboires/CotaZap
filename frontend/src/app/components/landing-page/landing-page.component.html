@@ -1,0 +1,61 @@
+<div class="landing-container">
+    <nav class="navbar">
+        <div class="logo">Cota<span>Zap</span></div>
+        <div class="nav-links">
+            <a href="#features">Recursos</a>
+            <a href="#about">Sobre</a>
+            <button class="btn-secondary" (click)="goToAuth('login')">Entrar</button>
+            <button class="btn-primary" (click)="goToAuth('register')">Cadastrar-se</button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Automatize suas <span>Cotações</span> via WhatsApp</h1>
+            <p>A plataforma definitiva para gerenciar suas cotações de forma inteligente, rápida e integrada com o Zap.
+            </p>
+            <div class="hero-btns">
+                <button class="btn-primary btn-lg" (click)="goToAuth('register')">Começar Agora</button>
+                <button class="btn-outline btn-lg">Ver Demonstração</button>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <div class="card-body">
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                    <div class="skeleton-grid">
+                        <div class="skeleton-box"></div>
+                        <div class="skeleton-box"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <h2>Por que escolher o <span>CotaZap</span>?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon">🚀</div>
+                <h3>Agilidade</h3>
+                <p>Receba respostas de orçamentos em segundos direto no seu WhatsApp.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h3>Gestão</h3>
+                <p>Painel completo para acompanhar o status de cada cotação em tempo real.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🔒</div>
+                <h3>Segurança</h3>
+                <p>Seus dados e de seus clientes protegidos com criptografia de ponta.</p>
+            </div>
+        </div>
+    </section>
+</div>
