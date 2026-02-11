@@ -1,0 +1,36 @@
+# .gitignore for CotaZap (Full-Stack .NET 9/10 + Angular 21)
+
+## .NET patterns
+[Bb]in/
+[Oo]bj/
+out/
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+## Node / Angular patterns
+node_modules/
+dist/
+.angular/
+.sass-cache/
+npm-debug.log
+yarn-error.log
+/frontend/src/assets/i18n/*.json
+!/frontend/src/assets/i18n/pt-BR.json
+
+## Miscellaneous
+.DS_Store
+Thumbs.db
+*.user
+*.suo
+*.sln.docstates
+.history/
+.idea/
+*.sublime-workspace
+
+## Environment Files
+.env
+.env.*
+!.env.example

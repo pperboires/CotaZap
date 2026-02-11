@@ -1,0 +1,6 @@
+@CotaZap.Api_HostAddress = http://localhost:5094
+
+GET {{CotaZap.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
