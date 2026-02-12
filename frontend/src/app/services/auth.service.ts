@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
@@ -9,6 +9,13 @@ export class AuthService {
     private http = inject(HttpClient);
     private apiUrl = 'http://localhost:5000/auth';
 
+    // Signal to track authentication state reactively
+    isAuthenticated = signal<boolean>(this.hasToken());
+
+    private hasToken(): boolean {
+        return !!localStorage.getItem('token');
+    }
+
     register(email: string, password: string): Observable<any> {
         return this.http.post(`${this.apiUrl}/register`, { email, password });
     }
@@ -18,6 +25,7 @@ export class AuthService {
             tap(response => {
                 if (response.accessToken) {
                     localStorage.setItem('token', response.accessToken);
+                    this.isAuthenticated.set(true);
                 }
             })
         );
@@ -25,10 +33,7 @@ export class AuthService {
 
     logout(): void {
         localStorage.removeItem('token');
-    }
-
-    isLoggedIn(): boolean {
-        return !!localStorage.getItem('token');
+        this.isAuthenticated.set(false);
     }
 
     getGoogleAuthUrl(): string {

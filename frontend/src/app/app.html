@@ -1,4 +1,5 @@
 <div class="app-container">
+  @if (authService.isAuthenticated()) {
   <nav class="navbar">
     <a href="#" class="nav-link active">
       <span class="nav-icon">🏠</span>
@@ -12,7 +13,12 @@
       <span class="nav-icon">⚙️</span>
       <span>Settings</span>
     </a>
+    <a (click)="logout()" class="nav-link" style="cursor: pointer; margin-top: auto;">
+      <span class="nav-icon">🚪</span>
+      <span>Sair</span>
+    </a>
   </nav>
+  }
 
   <main class="main-content">
     <router-outlet></router-outlet>
