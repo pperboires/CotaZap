@@ -2,15 +2,15 @@
     <div class="auth-card">
         <div class="logo" (click)="goHome()">Cota<span>Zap</span></div>
 
-        <h2>{{ isLogin ? 'Bem-vindo de volta' : 'Crie sua conta' }}</h2>
-        <p class="subtitle">{{ isLogin ? 'Entre com suas credenciais para continuar' : 'Comece a automatizar suas
+        <h2>{{ isLogin() ? 'Bem-vindo de volta' : 'Crie sua conta' }}</h2>
+        <p class="subtitle">{{ isLogin() ? 'Entre com suas credenciais para continuar' : 'Comece a automatizar suas
             cotações hoje' }}</p>
 
         <div class="social-auth">
             <button class="btn-social" (click)="loginWithGoogle()">
                 <img src="https://lh3.googleusercontent.com/COxitqS2nrnZrtp61S-ID8qn1i3gtTb5oK19vBnTXh5DBy0B9Sq9fO7G6f6Gfs4G93_8"
                     alt="Google">
-                {{ isLogin ? 'Entrar com Google' : 'Cadastrar com Google' }}
+                {{ isLogin() ? 'Entrar com Google' : 'Cadastrar com Google' }}
             </button>
         </div>
 
@@ -21,23 +21,28 @@
         <form (submit)="onSubmit($event)">
             <div class="form-group">
                 <label for="email">E-mail</label>
-                <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="seu@email.com" required>
+                <input type="email" id="email" [ngModel]="email()" (ngModelChange)="email.set($event)" name="email"
+                    placeholder="seu@email.com" required>
             </div>
 
             <div class="form-group">
                 <label for="password">Senha</label>
-                <input type="password" id="password" [(ngModel)]="email" name="password" placeholder="••••••••"
-                    required>
+                <input type="password" id="password" [ngModel]="password()" (ngModelChange)="password.set($event)"
+                    name="password" placeholder="••••••••" required>
+            </div>
+
+            <div *ngIf="errorMessage()" class="error-message">
+                {{ errorMessage() }}
             </div>
 
             <button type="submit" class="btn-primary btn-block">
-                {{ isLogin ? 'Entrar' : 'Criar Conta' }}
+                {{ isLogin() ? 'Entrar' : 'Criar Conta' }}
             </button>
         </form>
 
         <p class="footer-text">
-            {{ isLogin ? 'Ainda não tem conta?' : 'Já tem uma conta?' }}
-            <a (click)="toggleMode()">{{ isLogin ? 'Cadastre-se' : 'Faça login' }}</a>
+            {{ isLogin() ? 'Ainda não tem conta?' : 'Já tem uma conta?' }}
+            <a (click)="toggleMode()">{{ isLogin() ? 'Cadastre-se' : 'Faça login' }}</a>
         </p>
     </div>
 </div>

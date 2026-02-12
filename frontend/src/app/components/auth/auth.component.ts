@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,20 +16,27 @@ export class AuthComponent implements OnInit {
     private route = inject(ActivatedRoute);
     private authService = inject(AuthService);
 
-    isLogin = true;
-    email = '';
-    password = '';
+    isLogin = signal(true);
+    email = signal('');
+    password = signal('');
+    errorMessage = signal('');
 
-    ngOnInit() {
+    constructor() {
         this.route.queryParams.subscribe(params => {
-            this.isLogin = params['mode'] !== 'register';
+            this.isLogin.set(params['mode'] !== 'register');
+            this.errorMessage.set('');
         });
     }
 
+    ngOnInit() {
+        // Initialization logic moved to constructor or signals
+    }
+
     toggleMode() {
-        this.isLogin = !this.isLogin;
+        this.isLogin.update(val => !val);
+        this.errorMessage.set('');
         this.router.navigate([], {
-            queryParams: { mode: this.isLogin ? 'login' : 'register' }
+            queryParams: { mode: this.isLogin() ? 'login' : 'register' }
         });
     }
 
@@ -39,20 +46,60 @@ export class AuthComponent implements OnInit {
 
     onSubmit(event: Event) {
         event.preventDefault();
-        if (this.isLogin) {
-            this.authService.login(this.email, this.password).subscribe({
+        this.errorMessage.set('');
+        const emailVal = this.email();
+        const passwordVal = this.password();
+
+        if (this.isLogin()) {
+            this.authService.login(emailVal, passwordVal).subscribe({
                 next: () => this.router.navigate(['/home']),
-                error: (err) => alert('Erro ao entrar: ' + err.message)
+                error: (err) => {
+                    console.error('Login error full response:', err);
+                    this.errorMessage.set(this.handleError(err, 'Erro ao entrar. Verifique suas credenciais.'));
+                }
             });
         } else {
-            this.authService.register(this.email, this.password).subscribe({
+            this.authService.register(emailVal, passwordVal).subscribe({
                 next: () => {
                     alert('Cadastro realizado com sucesso! Faça login agora.');
                     this.toggleMode();
                 },
-                error: (err) => alert('Erro ao cadastrar: ' + err.message)
+                error: (err) => {
+                    console.error('Registration error full response:', err);
+                    this.errorMessage.set(this.handleError(err, 'Erro ao cadastrar. Tente novamente mais tarde.'));
+                }
             });
         }
+    }
+
+    private handleError(err: any, defaultMessage: string): string {
+        const errorData = err.error;
+
+        // 1. Handle standard .NET ValidationProblemDetails (errors object with arrays)
+        if (errorData?.errors) {
+            return Object.keys(errorData.errors)
+                .map(key => `${errorData.errors[key].join(', ')}`)
+                .join('\n');
+        }
+
+        // 2. Handle simple detail or title
+        if (errorData?.detail) return errorData.detail;
+        if (errorData?.title) return errorData.title;
+
+        // 3. Handle string-only error body
+        if (typeof errorData === 'string') return errorData;
+
+        // 4. Handle Blob errors (often happens if responseType is wrong or unexpected)
+        if (errorData instanceof Blob) {
+            return "Erro desconhecido (formato Blob). Verifique o console.";
+        }
+
+        // 5. Check if it's a progress event or other non-standard error
+        if (err.status === 0) {
+            return "Não foi possível conectar ao servidor. Verifique se o backend está rodando.";
+        }
+
+        return defaultMessage;
     }
 
     loginWithGoogle() {
