@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using CotaZap.Api.Data;
 using CotaZap.Api.Models;
+using CotaZap.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,7 @@ var app = builder.Build();
 app.UseCors("AllowAngular");
 
 app.MapGroup("/auth").MapIdentityApi<ApplicationUser>();
+app.MapSupplierEndpoints();
 
 app.UseAuthentication();
 app.UseAuthorization();

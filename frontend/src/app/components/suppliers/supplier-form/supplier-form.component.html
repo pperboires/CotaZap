@@ -1,0 +1,39 @@
+<div class="form-container">
+    <h2>{{ isEditMode() ? 'Editar Fornecedor' : 'Novo Fornecedor' }}</h2>
+
+    <form (submit)="onSubmit()">
+        <div class="form-group">
+            <label for="name">Nome da Empresa *</label>
+            <input type="text" id="name" [ngModel]="name()" (ngModelChange)="name.set($event)" name="name" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="contactName">Nome do Contato</label>
+                <input type="text" id="contactName" [ngModel]="contactName()" (ngModelChange)="contactName.set($event)"
+                    name="contactName">
+            </div>
+
+            <div class="form-group">
+                <label for="whatsapp">Whatsapp (Telefone) *</label>
+                <input type="text" id="whatsapp" [ngModel]="whatsapp()" (ngModelChange)="whatsapp.set($event)"
+                    name="whatsapp" required placeholder="(xx) xxxxx-xxxx">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="comment">Comentários</label>
+            <textarea id="comment" [ngModel]="comment()" (ngModelChange)="comment.set($event)" name="comment"
+                rows="4"></textarea>
+        </div>
+
+        <div *ngIf="errorMessage()" class="error-message">
+            {{ errorMessage() }}
+        </div>
+
+        <div class="actions">
+            <button type="button" (click)="cancel()" class="btn-secondary">Cancelar</button>
+            <button type="submit" class="btn-primary">Salvar</button>
+        </div>
+    </form>
+</div>
